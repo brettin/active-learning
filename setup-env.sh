@@ -6,7 +6,7 @@ conda install -y scipy
 conda install -y pandas
 conda install -y scikit-learn
 conda install -y matplotlib
-conda install -y tensorflow
+conda install -y tensorflow-gpu
 conda install -y keras
 conda install -y google-apputils
 
