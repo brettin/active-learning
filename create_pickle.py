@@ -1,6 +1,8 @@
 import pandas as pd
+import sys
 
-df = pd.read_csv("/raid/brettin/active-learning/nt_train2.csv", header=None)
+filename=sys.argv[1]
+df = pd.read_csv(filename, header=None)
 data = {'target':df.iloc[:,0].values, 'data':df.iloc[:,1:].values }
 
 print('shape target: ', data['target'].shape)
