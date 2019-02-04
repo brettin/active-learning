@@ -39,6 +39,7 @@ import numpy as np
 from sklearn.preprocessing import normalize
 from sklearn.preprocessing import StandardScaler
 
+
 from google.apputils import app
 import gflags as flags
 from tensorflow import gfile
@@ -70,7 +71,7 @@ flags.DEFINE_string("confusions", "0.", "Percentage of labels to randomize")
 flags.DEFINE_string("active_sampling_percentage", "1.0",
                     "Mixture weights on active sampling.")
 flags.DEFINE_string(
-    "score_method", "logistic",
+    "score_method", "agg_atnn_bin",
     "Method to use to calculate accuracy.")
 flags.DEFINE_string(
     "select_method", "None",
@@ -179,9 +180,12 @@ def generate_one_curve(X,
     # Set seed batch to provide enough samples to get at least 4 per class
     # TODO(lishal): switch to sklearn stratified sampler
     seed_batch = int(warmstart_size * train_size)
+    print ("Setting seed_batch to: ", seed_batch)
   else:
     seed_batch = int(warmstart_size)
+    print ("Setting seed_batch to: ", seed_batch)
   seed_batch = max(seed_batch, 6 * len(np.unique(y)))
+  print ("Setting seed_batch to: ", seed_batch)
 
   indices, X_train, y_train, X_val, y_val, X_test, y_test, y_noise = (
       utils.get_train_val_test_splits(X,y,max_points,seed,confusion,
