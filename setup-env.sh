@@ -1,12 +1,12 @@
 # set up a new python envirnment
-conda create --name py27_active-learning python=2.7
+conda create --name py27_tf_19_active-learning python=2.7
 conda activate py27_active-learning
 conda install -y numpy
 conda install -y scipy
 conda install -y pandas
 conda install -y scikit-learn
 conda install -y matplotlib
-conda install -y tensorflow-gpu
+conda install -y tensorflow-gpu=1.9
 conda install -y keras
 conda install -y google-apputils
 
