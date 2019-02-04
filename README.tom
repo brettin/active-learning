@@ -1,0 +1,107 @@
+# set up the data
+create a pkl file from a csv file
+
+
+I have the agg_atten_bin code mostly functionalized.
+I have a call to agg_atten.create_model placed in if/else in utils/utils.py (get_model) that returns a dnn model
+
+# for the active learning run
+10,000 training samples
+1,000 at a time
+
+The command runs:
+python run_experiment.py --dataset iris --sampling_method uniform
+
+This would be our command:
+nohup python run_experiment.py --data_dir . --dataset uniq.small --sampling_method margin              --score_method agg_atnn_bin > margin.1 2>&1 &
+nohup python run_experiment.py --data_dir . --dataset uniq.top21 --sampling_method informative_diverse --score_method agg_atnn_bin > informative_diverse.1 2>&1 &
+nohup python run_experiment.py --data_dir . --dataset uniq.top21 --sampling_method hierarchical        --score_method agg_atnn_bin > heirarchical.1 2>&1 & > margin.1 2>&1 &
+nohup python run_experiment.py --data_dir . --dataset uniq.top21 --sampling_method uniform             --score_method agg_atnn_bin > uniform.1 2>&1 &
+nohup python run_experiment.py --data_dir . --dataset uniq.top21 --sampling_method margin_cluster_mean --score_method agg_atnn_bin > margin_cluster_mean.1 2>&1 &
+nohup python run_experiment.py --data_dir . --dataset uniq.top21 --sampling_method graph_density       --score_method agg_atnn_bin > graph_density.1 2>&1 &
+nohup python run_experiment.py --data_dir . --dataset uniq.top21 --sampling_method kcenter             --score_method agg_atnn_bin > kcenter.1 2>&1 &
+
+  AL_MAPPING['margin'] = MarginAL
+  AL_MAPPING['informative_diverse'] = InformativeClusterDiverseSampler
+  AL_MAPPING['hierarchical'] = HierarchicalClusterAL
+  AL_MAPPING['uniform'] = UniformSampling
+  AL_MAPPING['margin_cluster_mean'] = RepresentativeClusterMeanSampling
+  AL_MAPPING['graph_density'] = GraphDensitySampler
+  AL_MAPPING['kcenter'] = kCenterGreedy
+
+smallCNN model does not work with weighted_expert or simulate_batch
+Run active learner on classification tasks.
+
+Supported datasets include mnist, letter, cifar10, newsgroup20, rcv1,
+wikipedia attack, and select classification datasets from mldata.
+See utils/create_data.py for all available datasets.
+
+For binary classification, mnist_4_9 indicates mnist filtered down to just 4 and
+9.
+By default uses logistic regression but can also train using kernel SVM.
+2 fold cv is used to tune regularization parameter over a exponential grid.
+
+
+flags:
+./run_experiment.py:
+  --active_sampling_percentage: Mixture weights on active sampling.
+    (default: '1.0')
+  --batch_size: Can be float or integer. Float indicates batch size as a
+    percentage of training data size.
+    (default: '0.02')
+    (a number)
+  --confusions: Percentage of labels to randomize
+    (default: '0.')
+  --data_dir: Directory with predownloaded and saved datasets.
+    (default: '/tmp/data')
+  --dataset: Dataset name
+    (default: 'letter')
+  --do_save: whether to save log and results
+    (default: 'True')
+  --max_dataset_size: maximum number of datapoints to include in data zero
+    indicates no limit
+    (default: '15000')
+  --normalize_data: Whether to normalize the data.
+    (default: 'False')
+  --sampling_method: Name of sampling method to use, can be any defined in
+    AL_MAPPING in sampling_methods.constants
+    (default: 'margin')
+  --save_dir: Where to save outputs
+    (default: '/tmp/toy_experiments')
+  --score_method: Method to use to calculate accuracy.
+    (default: 'agg_atnn_bin')
+  --seed: Seed to use for rng and random state
+    (default: '1')
+    (an integer)
+  --select_method: Method to use for selecting points.
+    (default: 'None')
+  --standardize_data: Whether to standardize the data.
+    (default: 'True')
+  --train_horizon: how far to extend learning curve as a percent of train
+    (default: '1.0')
+    (a number)
+  --trials: Number of curves to create using different seeds
+    (default: '1')
+    (an integer)
+  --warmstart_size: Can be float or integer. Float indicates percentage of
+    training data to use in the initial warmstart model
+    (default: '0.02')
+    (a number)
+
+Try --helpfull to get a list of all flags.
+
+# Number of different classes.
+cut -f1 -d',' uniq.top21.csv | sort | uniq -c
+
+ 380,575 0
+  23,947 1
+ -------
+ 404,522
+
+
+margin.2
+--warmstart_size 5000
+--batch_size 1000
+
+hierarchical.2
+python run_experiment.py --data_dir . --dataset uniq.top21  --score_method agg_atnn_bin --sampling_method hierarchical --warmstart_size 10000 --batch_size 5000 --max_dataset_size 100000 > heirarchical.2
