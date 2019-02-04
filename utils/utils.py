@@ -36,6 +36,7 @@ from tensorflow import gfile
 from utils.kernel_block_solver import BlockKernelSolver
 from utils.small_cnn import SmallCNN
 from utils.allconv import AllConv
+from utils.agg_atnn_bin import AggAtnnBin
 
 
 class Logger(object):
@@ -242,7 +243,9 @@ def get_model(method, seed=13):
     # Model does not work with weighted_expert or simulate_batch
     model = AllConv(random_state=seed)
     return model
-
+  elif method == "agg_atnn_bin":
+    model = AggAtnnBin(random_state=seed)
+    return model
   else:
     raise NotImplementedError("ERROR: " + method + " not implemented")
 
