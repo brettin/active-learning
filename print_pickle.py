@@ -1,11 +1,11 @@
+import pandas as pd
 import sys
-filename=sys.argv[1]
+
+infile=sys.argv[1]
+
 
 import pickle
 
-pickle_off = open(filename,"rb")
+pickle_off = open(infile,"rb")
 data2 = pickle.load(pickle_off)
 print(data2)
-
-print ('shape of target: ', data2['target'].shape)
-print ('shape of data: ', data2['data'].shape)
